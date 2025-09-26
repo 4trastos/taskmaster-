@@ -228,3 +228,170 @@ Dime si prefieres C (más acorde al entorno 42) o Python para un prototipo rápi
 Opcionee:
 	•	(A) Esqueleto en C: estructuras, main + signal handling + ejemplo de start_program() y reap_children(); o
 	•	(B) Prototipo en Python: más corto, parseo YAML rápido y demo de comportamiento (útil para validar lógica antes de reescribir en C).
+
+Perfecto 🚀 Te preparo un README.md completo en español que resume el proyecto Taskmaster de 42, con:
+	•	Introducción
+	•	Objetivos
+	•	Requisitos obligatorios
+	•	Explicación técnica detallada
+	•	Conocimientos que debes estudiar
+	•	Plan de implementación y defensa
+
+Aquí lo tienes:
+
+# Taskmaster (42 Project)
+
+## 📌 Introducción
+Taskmaster es un proyecto de 42 cuyo objetivo es implementar un **job-control daemon** (similar a `supervisord`).  
+Debe ser capaz de **lanzar, supervisar, reiniciar y detener programas** siguiendo una configuración definida por el usuario.  
+
+A diferencia de un simple script de bash, **Taskmaster supervisa procesos de forma robusta**:  
+- sabe si están vivos,  
+- aplica políticas de reinicio,  
+- reacciona a señales,  
+- mantiene logs,  
+- y ofrece una shell de control para gestionarlos.  
+
+---
+
+## 🎯 Objetivos
+- Implementar un programa que **ejecute y supervise procesos**.
+- Mantener un **estado interno** de cada proceso (vivo, parado, fallando, reiniciando...).
+- Permitir **recargar la configuración con `SIGHUP`** sin matar procesos que no cambian.
+- Proporcionar un **sistema de logs** y una **shell interactiva** para control en tiempo real.
+- Responder a fallos de procesos con **políticas configurables de reinicio**.
+
+---
+
+## ✅ Requisitos obligatorios
+
+### Configuración
+El archivo de configuración debe definir, por cada programa:
+
+- `cmd`: comando para ejecutar.  
+- `numprocs`: número de instancias.  
+- `autostart`: arrancar automáticamente al iniciar Taskmaster.  
+- `autorestart`: `always`, `never`, `unexpected`.  
+- `exitcodes`: lista de códigos de salida esperados.  
+- `startretries`: nº de reintentos de arranque antes de marcar como *FATAL*.  
+- `starttime`: tiempo mínimo (seg) para considerar un arranque exitoso.  
+- `stopsignal`: señal para detener (`SIGTERM` por defecto).  
+- `stoptime`: tiempo de espera antes de usar `SIGKILL`.  
+- `stdout` / `stderr`: redirecciones a archivos o `/dev/null`.  
+- `env`: variables de entorno adicionales.  
+- `workingdir`: directorio de trabajo.  
+- `umask`: permisos por defecto de ficheros creados.  
+
+### Comportamiento esperado
+- **Lanzar procesos** con sus configuraciones.  
+- **Supervisar** (con `SIGCHLD` y `waitpid`) y detectar caídas.  
+- **Aplicar políticas de reinicio** según `autorestart`, `starttime`, `startretries`.  
+- **Control shell** con comandos:
+  - `status`
+  - `start <prog>`
+  - `stop <prog>`
+  - `restart <prog>`
+  - `reload` (recargar config con `SIGHUP`)
+  - `quit` (cerrar Taskmaster)  
+- **Logging** en fichero con timestamps para eventos importantes.  
+
+---
+
+## ⚙️ Explicación técnica
+
+### 1. Lanzamiento de procesos
+- Usar `fork` + `execve` (o `posix_spawn`).  
+- Antes del `exec`, aplicar:
+  - `umask`  
+  - `chdir`  
+  - `dup2` para redirecciones `stdout`/`stderr`  
+  - `setpgid` para aislar grupos de procesos  
+  - variables de entorno  
+
+### 2. Supervisión
+- Capturar `SIGCHLD` y usar `waitpid(..., WNOHANG)` para recolectar hijos.  
+- Actualizar estado (`RUNNING`, `STOPPED`, `FATAL`, etc.).  
+- Decidir reinicio según política:  
+  ```c
+  if (autorestart == ALWAYS) restart();
+  if (autorestart == UNEXPECTED && exit_code not in exitcodes) restart();
+
+3. Recarga de configuración (SIGHUP)
+	•	Parsear nueva config.
+	•	Comparar con la anterior:
+	•	Programas nuevos → lanzar.
+	•	Programas eliminados → detener.
+	•	Programas modificados → reiniciar solo si cambió cmd, env, etc.
+	•	Programas idénticos → no tocar instancias existentes.
+
+4. Apagado ordenado
+	•	En stop o quit:
+	•	Enviar stopsignal.
+	•	Esperar stoptime.
+	•	Si sigue vivo → SIGKILL.
+
+5. Shell de control
+	•	Usar readline para edición + historial.
+	•	Implementar los comandos requeridos.
+
+⸻
+
+📚 Conocimientos que necesitas estudiar
+
+🔑 Imprescindibles
+	•	Procesos en Unix: fork, execve, waitpid, kill.
+	•	Señales: sigaction, sigprocmask, SIGCHLD, SIGHUP.
+	•	Grupos de procesos: setpgid, setsid.
+	•	Redirección de ficheros: pipe, dup2, open.
+	•	Manejo de directorios y permisos: chdir, umask.
+	•	Multiplexación: poll, select, epoll.
+	•	Temporización: cálculos de starttime y stoptime.
+
+📖 Lecturas recomendadas
+	•	[The Linux Programming Interface – Michael Kerrisk]
+	•	[Advanced Programming in the UNIX Environment – W. Richard Stevens]
+	•	Manpages: man fork, man execve, man sigaction, man waitpid, man dup2, man setpgid.
+
+⸻
+
+🛠️ Plan de implementación
+	1.	MVP: leer config y lanzar un proceso.
+	2.	Supervisión básica con SIGCHLD.
+	3.	Políticas de reinicio (autorestart, starttime, startretries).
+	4.	Multiproceso (numprocs).
+	5.	Control shell (status, start, stop, restart, quit).
+	6.	Recarga con SIGHUP (diferencias inteligentes).
+	7.	Edge cases: procesos que se bloquean, producen mucho output o crean hijos.
+	8.	Logging robusto en fichero.
+	9.	Bonuses (si hay tiempo):
+	•	cliente/servidor con sockets
+	•	attach/detach con pty
+	•	notificaciones
+
+⸻
+
+🧪 Casos de prueba importantes
+	•	Proceso que sale enseguida → probar startretries.
+	•	Proceso que nunca arranca → marcar FATAL.
+	•	Proceso que produce mucho output → asegurar que no bloquea.
+	•	Proceso que ignora señales → comprobar stoptime + SIGKILL.
+	•	Proceso con hijos propios → matar por process group.
+	•	Recarga de config (SIGHUP) → cambios se aplican sin tocar procesos no modificados.
+
+⸻
+
+🎓 Defensa
+	•	Ten un config.yaml de ejemplo listo.
+	•	Demuestra:
+	•	status con instancias corriendo.
+	•	Matar un proceso manualmente → Taskmaster lo reinicia.
+	•	Recarga con SIGHUP → solo cambian los procesos modificados.
+	•	Logs con timestamps.
+	•	Explica tus decisiones de diseño (manejo de señales, sincronización, estructuras).
+
+⸻
+
+
+---
+
+¿Quieres que en este mismo README también te incluya un **esqueleto de código base en C** (con estructuras, `main`, manejo de `SIGCHLD`, etc.) para arrancar el proyecto más rápido, o prefieres dejarlo como documentación pura?
