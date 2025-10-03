@@ -13,6 +13,18 @@
 # include <sys/signal.h>
 # include <sys/user.h>
 
+typedef enum 
+{
+    STOPPED,            // Proceso detenido
+    STARTING,           // Iniciando
+    RUNNING,            // Ejecutándose correctamente
+    BACKOFF,            // Reintentando arranque
+    STOPPING,           // En proceso de parada
+    EXITED,             // Terminado (esperando decisión)
+    FATAL,              // Error fatal (sin más reintentos)
+    UNKNOWN
+}   process_state_t;
+
 //*** Binay logic ***/
 
 
