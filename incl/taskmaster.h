@@ -5,12 +5,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <signal.h>
 # include <sys/errno.h>
 # include <sys/types.h>
 # include <sys/fcntl.h>
 # include <sys/wait.h>
 # include <stdbool.h>
-# include <sys/signal.h>
 # include <sys/user.h>
 
 /************************************************************* */
@@ -98,3 +98,18 @@ typedef struct s_process
 size_t          ft_strlen(char *str);
 
 #endif
+
+
+/* 
+QUÉ HACE TASKMASTER REALMENTE:
+Para cada programa en el YAML:
+
+    Ejecuta el comando (fork() + exec())
+
+    Vigila si se cae (con SIGCHLD y waitpid())
+
+    Reinicia si es necesario (según autorestart)
+
+    Redirige logs (según stdout/stderr)
+
+    Responde a tus comandos (start/stop/restart) */
