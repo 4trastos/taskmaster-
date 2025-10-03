@@ -13,7 +13,7 @@
 # include <sys/signal.h>
 # include <sys/user.h>
 
-typedef enum 
+typedef enum s_process_state
 {
     STOPPED,            // Proceso detenido
     STARTING,           // Iniciando
@@ -23,7 +23,26 @@ typedef enum
     EXITED,             // Terminado (esperando decisión)
     FATAL,              // Error fatal (sin más reintentos)
     UNKNOWN
-}   process_state_t;
+}   t_process_state;
+
+typedef struct s_program_config
+{
+    char    *name;
+    char    *command;
+    char    **env;
+}   t_program_config;
+
+typedef struct s_process
+{
+    pid_t           pid;
+    int             instance_id;
+    t_process_state pstate;
+    time_t          start_time;
+    int             restart_count;
+    int             exit_code;
+    int             stdout_fd;
+    int             error_fd;
+}   t_process;
 
 //*** Binay logic ***/
 
