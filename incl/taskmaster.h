@@ -95,6 +95,6 @@ typedef struct s_process
 
 //*** auxiliary functions ***/
 
-
+size_t          ft_strlen(char *str);
 
 #endif
