@@ -13,6 +13,9 @@
 # include <sys/signal.h>
 # include <sys/user.h>
 
+/************************************************************* */
+// Campos de Configuración por Programa
+
 /* cmd: "comando a ejecutar"
 numprocs: 1
 autostart: true
@@ -29,6 +32,7 @@ env:
   VAR2: "valor2"
 workingdir: "/path/to/workdir"
 umask: "022" */
+/*************************************************************** */
 
 typedef enum s_autorestart
 {
