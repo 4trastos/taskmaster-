@@ -11,7 +11,7 @@ programs:
     cmd: "./bin/test_crash"
     numprocs: 1
     autostart: true                   # Para demostrar que Taskmaster arranca programas automáticamente
-    autorestart: "always"             # SPorque este programa SIEMPRE se crashea, Taskmaster lo reinicia constantemente para demostrar la supervisión
+    autorestart: "always"             # Porque este programa SIEMPRE se crashea, Taskmaster lo reinicia constantemente para demostrar la supervisión
     exitcodes: [0]                    # Aunque dice que solo el código 0 es "éxito", este programa NUNCA termina con 0 (se crashea), por lo que SIEMPRE se reiniciará
     startretries: 3                   # Si falla 3 veces seguidas en arrancar, marcar como FATAL (evitar loops infinitos)
     starttime: 2                      # Solo necesita 2 segundos para determinar que se crasheó (es rápido)
@@ -26,7 +26,7 @@ programs:
     cmd: "./bin/test_normal"
     numprocs: 1
     autostart: true
-    autorestart: "unexpected"         # Si termina con código 0 o 1 → NO reiniciar (esperado) · i termina con otro código → SÍ reiniciar (unexpected)
+    autorestart: "unexpected"         # Si termina con código 0 o 1 → NO reiniciar (esperado) · Si termina con otro código → SÍ reiniciar (unexpected)
     exitcodes: [0, 1]                 # Terminaciones esperadas con éxito
     startretries: 2
     starttime: 1
