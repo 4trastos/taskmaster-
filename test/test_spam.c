@@ -1,7 +1,7 @@
 #include "../incl/taskmaster.h"
 #include "../lib/printf/ft_printf.h"
 
-// 4. test_spam.c (Produce mucho output)
+// 4. test_spam_output.c (Produce mucho output)
 
 int main(void)
 {

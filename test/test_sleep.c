@@ -6,6 +6,7 @@
 void    handle_signal(int sig)
 {
     ft_printf("🔔 Señal %d recibida - Terminando\n", sig);
+    fflush(stdout); 
     exit (0);
 }
 

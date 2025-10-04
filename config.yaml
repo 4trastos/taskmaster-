@@ -1,0 +1,141 @@
+# Taskmaster Demo COnfiguration
+# Archivo de prueba corrección 42 Madrid
+
+programs:
+
+  # =============================================
+  # PROGRAMAS DE PRUEBAS (Obligatorios)
+  # =============================================
+
+  test_crash:
+    cmd: "./bin/test_crash"
+    numprocs: 1
+    autostart: true                   # Para demostrar que Taskmaster arranca programas automáticamente
+    autorestart: "always"             # SPorque este programa SIEMPRE se crashea, Taskmaster lo reinicia constantemente para demostrar la supervisión
+    exitcodes: [0]                    # Aunque dice que solo el código 0 es "éxito", este programa NUNCA termina con 0 (se crashea), por lo que SIEMPRE se reiniciará
+    startretries: 3                   # Si falla 3 veces seguidas en arrancar, marcar como FATAL (evitar loops infinitos)
+    starttime: 2                      # Solo necesita 2 segundos para determinar que se crasheó (es rápido)
+    stopsignal: "SIGTERM"
+    stoptime: 5                       # 5 segundos de gracia antes de SIGKILL (aunque se crashea solo)
+    stdout: "/tmp/test_crash.out"
+    stderr: "/tmp/test_crash.err"
+    workingdir: "./"
+    umask: "022"                      # Permisos por defecto seguros (archivos: 644, directorios: 755)
+  
+  test_normal_exit:
+    cmd: "./bin/test_normal"
+    numprocs: 1
+    autostart: true
+    autorestart: "unexpected"         # Si termina con código 0 o 1 → NO reiniciar (esperado) · i termina con otro código → SÍ reiniciar (unexpected)
+    exitcodes: [0, 1]                 # Terminaciones esperadas con éxito
+    startretries: 2
+    starttime: 1
+    stopsignal: "SIGTERM"
+    stoptime: 3
+    stdout: "/tmp/test_normal.out"
+    stderr: "/tmp/test_normal.err"
+    workingdir: "./"
+    umask: "022"
+
+  test_sleep_forever:
+    cmd: "./bin/test_sleep"
+    numprocs: 1
+    autostart: true
+    autorestart: "never"              # Para mostrar que Taskmaster respeta la política "nunca reiniciar", incluso si el proceso termina
+    exitcodes: [0]
+    startretries: 1                   # Solo 1 intento porque es un programa simple y estable
+    starttime: 1
+    stopsignal: "SIGUSR1"             # Para mostrar que Taskmaster puede usar señales personalizadas, no solo SIGTERM
+    stoptime: 5
+    stdout: "/tmp/test_sleep.out"
+    stderr: "/tmp/test_sleep.err"
+    workingdir: "./"
+    umask: "022"
+
+  test_spam_output:
+    cmd:  "./bin/test_spam"
+    numprocs: 1
+    autostart: false                  # Para mostrar el comando start manualmente en la demo
+    autorestart: "always"             # Porque después de spamear 100 líneas, termina, y queremos que se reinicie para seguir spameando
+    exitcodes: [0]
+    startretries: 2
+    starttime: 2
+    stopsignal: "SIGTERM"
+    stoptime: 3
+    stdout: "/tmp/test_spam.out"
+    stderr: "/tmp/test_spam.err"
+    workingdir: "./"
+    umask: "022"
+
+  # =============================================
+  # PROGRAMAS "REALES" (Demostración)
+  # =============================================
+
+  simple_webserver:
+    cmd: "python3 -m http.server 8080"
+    numprocs: 1
+    autostart: false                  # Arrancar manualmente en demo
+    autorestart: "unexpected"         # Comportamiento típico de servidores: reiniciar solo si fallan inesperadamente
+    exitcodes: [0,1]
+    startretries: 2
+    starttime: 3
+    stopsignal: "SIGTERM"
+    stoptime: 10                      # Servidores web pueden necesitar más tiempo para limpiar y terminar.
+    stdout: "/tmp/webserver.out"
+    stderr: "/tmp/webserver.err"
+    workingdir: "/tmp/"
+    env:                              # Para mostrar que Taskmaster puede setear variables de entorno
+      PORT: "8080"                
+      HOST: "localhost"
+
+
+  # =============================================
+  # MÚLTIPLES INSTANCIAS (DEMO numprocs)
+  # =============================================
+
+  multi_instance:
+    cmd: "./bin/test_sleep"
+    numprocs: 3                       # 3 instancias en paralelo - Taskmaster puede manejar múltiples instancias del mismo programa
+    autostart: true
+    autorestart: "always"             # Para que si alguna instancia cae, se reinicie automáticamente
+    exitcodes: [0]
+    startretries: 2
+    starttime: 2
+    stopsignal: "SIGTERM"
+    stoptime: 5
+    stdout: "/tmp/multi_.out"         # _ será reemplazado por instance_id
+    stderr: "/tmp/multi_.err"
+    workingdir: "./"
+    umask: "022"
+
+  # =============================================
+  # PROGRAMAS DEL SISTEMA
+  # =============================================
+
+  system_monitor:
+    cmd: "/usr/bin/top -b -n 2"
+    numprocs: 1
+    autostart: true
+    autorestart: "unexpected"
+    exitcodes: [0]
+    startretries: 2
+    starttime: 3
+    stopsignal: "SIGTERM"
+    stoptime: 5                         # Necesitar más tiempo para limpiar la terminal y terminar.
+    stdout: "/tmp/system_monitor.out"
+    stderr: "/tmp/system_monitor.err"
+    workingdir: "/tmp/"
+
+  directory_watcher:
+    cmd: "/bin/ls -la /tmp | /usr/bin/head -10"
+    numprocs: 1
+    autostart: true
+    autorestart: "unexpected"
+    exitcodes: [0]
+    startretries: 3
+    starttime: 2
+    stopsignal: "SIGTERM"
+    stoptime: 2
+    stdout: "/tmp/directory_watcher.out"
+    stderr: "/tmp/directory_watcher.err"
+    workingdir: "/tmp/"
