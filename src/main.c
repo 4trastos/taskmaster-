@@ -18,7 +18,7 @@ int main(int argc, char **argv, char **envp)
     // 5. Manejo de señales (SIGCHLD)
     // 6. Detección de estado de procesos
     // 7. Políticas de reinicio básicas
-    // 8. Sistema de logging
+    // 8. Sistema de logging    (es la memoria del daemon)
 
     // 9. Múltiples instancias (numprocs)
     // 10. Recarga con SIGHUP
