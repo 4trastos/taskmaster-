@@ -13,26 +13,9 @@
 # include <stdbool.h>
 # include <sys/user.h>
 
-/************************************************************* */
-// Campos de Configuración por Programa
-
-/* cmd: "comando a ejecutar"
-numprocs: 1
-autostart: true
-autorestart: "unexpected"  # always, never, unexpected
-exitcodes: [0, 1]
-startretries: 3
-starttime: 5
-stopsignal: "SIGTERM"
-stoptime: 10
-stdout: "/path/to/stdout.log"
-stderr: "/path/to/stderr.log"
-env:
-  VAR1: "valor1"
-  VAR2: "valor2"
-workingdir: "/path/to/workdir"
-umask: "022" */
-/*************************************************************** */
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 200
+# endif
 
 typedef enum s_autorestart
 {
@@ -55,22 +38,23 @@ typedef enum s_process_state
 
 typedef struct s_program_config
 {
-    char            *name;
-    char            *command;
-    char            **env;
-    char            *workingdir;
-    char            *stdout_path;
-    char            *stderr_path;
-    int             *exitcodes;
-    int             numbexicod;
-    int             numprocs;
-    int             starttime;
-    int             stoptime;
-    int             stopsignal;
-    int             startretries;
-    bool            autostart;
-    mode_t          umask;
-    t_autorestart   autorestart;
+    char                *name;
+    char                *command;
+    char                **env;
+    char                *workingdir;
+    char                *stdout_path;
+    char                *stderr_path;
+    int                 *exitcodes;
+    int                 numbexicod;
+    int                 numprocs;
+    int                 starttime;
+    int                 stoptime;
+    int                 stopsignal;
+    int                 startretries;
+    bool                autostart;
+    mode_t              umask;
+    t_autorestart       autorestart;
+    t_program_config    *next;
 }   t_program_config;
 
 typedef struct s_process
@@ -95,7 +79,16 @@ typedef struct s_process
 
 //*** auxiliary functions ***/
 
-size_t          ft_strlen(char *str);
+size_t  ft_strlen(char *str);
+char*   substr(const char *src, int start, int length);
+
+//*** GNL ***/
+int		get_next_line(int fd, char **line);
+char	*ft_strchr(char *s, int c);
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t n, size_t b);
+size_t	ft_strlen(char *str);
+char	*ft_strdup(char *s1);
 
 #endif
 
