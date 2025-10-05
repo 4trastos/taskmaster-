@@ -17,8 +17,8 @@ programs:
     starttime: 2                      # Solo necesita 2 segundos para determinar que se crasheó (es rápido)
     stopsignal: "SIGTERM"
     stoptime: 5                       # 5 segundos de gracia antes de SIGKILL (aunque se crashea solo)
-    stdout: "/tmp/test_crash.out"
-    stderr: "/tmp/test_crash.err"
+    stdout: "/tmp/test_crash.log"
+    stderr: "/tmp/test_crash_err.log"
     workingdir: "./"
     umask: "022"                      # Permisos por defecto seguros (archivos: 644, directorios: 755)
   
@@ -32,8 +32,8 @@ programs:
     starttime: 1
     stopsignal: "SIGTERM"
     stoptime: 3
-    stdout: "/tmp/test_normal.out"
-    stderr: "/tmp/test_normal.err"
+    stdout: "/tmp/test_normal.log"
+    stderr: "/tmp/test_normal_err.log"
     workingdir: "./"
     umask: "022"
 
@@ -47,8 +47,8 @@ programs:
     starttime: 1
     stopsignal: "SIGUSR1"             # Para mostrar que Taskmaster puede usar señales personalizadas, no solo SIGTERM
     stoptime: 5
-    stdout: "/tmp/test_sleep.out"
-    stderr: "/tmp/test_sleep.err"
+    stdout: "/tmp/test_sleep.log"
+    stderr: "/tmp/test_sleep_err.log"
     workingdir: "./"
     umask: "022"
 
@@ -62,8 +62,8 @@ programs:
     starttime: 2
     stopsignal: "SIGTERM"
     stoptime: 3
-    stdout: "/tmp/test_spam.out"
-    stderr: "/tmp/test_spam.err"
+    stdout: "/tmp/test_spam.log"
+    stderr: "/tmp/test_spam_err.log"
     workingdir: "./"
     umask: "022"
 
@@ -81,8 +81,8 @@ programs:
     starttime: 3
     stopsignal: "SIGTERM"
     stoptime: 10                      # Servidores web pueden necesitar más tiempo para limpiar y terminar.
-    stdout: "/tmp/webserver.out"
-    stderr: "/tmp/webserver.err"
+    stdout: "/tmp/webserver.log"
+    stderr: "/tmp/webserver_err.log"
     workingdir: "/tmp/"
     env:                              # Para mostrar que Taskmaster puede setear variables de entorno
       PORT: "8080"                
@@ -103,8 +103,8 @@ programs:
     starttime: 2
     stopsignal: "SIGTERM"
     stoptime: 5
-    stdout: "/tmp/multi_.out"         # _ será reemplazado por instance_id
-    stderr: "/tmp/multi_.err"
+    stdout: "/tmp/multi_.log"         # _ será reemplazado por instance_id
+    stderr: "/tmp/multi_err.log"
     workingdir: "./"
     umask: "022"
 
@@ -122,8 +122,8 @@ programs:
     starttime: 3
     stopsignal: "SIGTERM"
     stoptime: 5                         # Necesitar más tiempo para limpiar la terminal y terminar.
-    stdout: "/tmp/system_monitor.out"
-    stderr: "/tmp/system_monitor.err"
+    stdout: "/tmp/system_monitor.log"
+    stderr: "/tmp/system_monitor_err.log"
     workingdir: "/tmp/"
 
   directory_watcher:
@@ -136,6 +136,6 @@ programs:
     starttime: 2
     stopsignal: "SIGTERM"
     stoptime: 2
-    stdout: "/tmp/directory_watcher.out"
-    stderr: "/tmp/directory_watcher.err"
+    stdout: "/tmp/directory_watcher.log"
+    stderr: "/tmp/directory_watcher_err.log"
     workingdir: "/tmp/"
