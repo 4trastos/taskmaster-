@@ -12,7 +12,7 @@ size_t  ft_strlen(char *str)
     return (len);
 }
 
-char* substr(const char *src, int start, int length) {
+char* ft_substr(const char *src, int start, int length) {
     int src_len = strlen(src);
 
     if (start < 0 || start >= src_len || length <= 0)
@@ -29,4 +29,17 @@ char* substr(const char *src, int start, int length) {
     sub[length] = '\0';
 
     return sub;
+}
+
+int	ft_strcmp(const char *s1, const char *s2) {
+	int	i;
+
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+bool ft_atob(const char *str) {
+    return (str && ft_strcmp(str, "true") == 0) ? true : false;
 }

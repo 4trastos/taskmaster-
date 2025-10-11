@@ -1,6 +1,8 @@
 #ifndef TASKMASTER_H
 # define    TASKMASTER_H
 
+# include <limits.h>
+# include <ctype.h>
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -52,7 +54,8 @@ typedef struct s_program_config
     int                 stopsignal;
     int                 startretries;
     bool                autostart;
-    mode_t              umask;
+    //mode_t              umask;
+    char                *umask;
     t_autorestart       autorestart;
     t_program_config    *next;
 }   t_program_config;
@@ -72,6 +75,9 @@ typedef struct s_process
 //*** Binay logic ***/
 
 
+//*** Parse logic ***/
+int get_number_of_program(char *filename);
+t_program_config init_program_config_structs(char * filename, int progam_index);
 
 //*** comunications & signals ***/
 
@@ -81,6 +87,9 @@ typedef struct s_process
 
 size_t  ft_strlen(char *str);
 char*   substr(const char *src, int start, int length);
+int	    ft_atoi(const char *str);
+int     ft_strcmp(const char *s1, const char *s2);
+bool    ft_atob(const char *str);
 
 //*** GNL ***/
 int		get_next_line(int fd, char **line);
