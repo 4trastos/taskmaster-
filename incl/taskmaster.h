@@ -6,16 +6,27 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <signal.h>
+# include <limits.h>
+# include <stdbool.h>
+# include <termios.h>
 # include <sys/errno.h>
 # include <sys/types.h>
 # include <sys/fcntl.h>
 # include <sys/wait.h>
-# include <stdbool.h>
 # include <sys/user.h>
+# include <sys/wait.h>
+# include <sys/ioctl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+
+# define PROMPT "TaskMaster> "
+# define INCREASE 20
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 200
 # endif
+
+extern int		g_signal;
 
 typedef enum s_autorestart
 {
@@ -79,10 +90,15 @@ int     get_number_of_program(char *filename);
 
 //*** comunications & signals ***/
 
+void    init_signal(void);
+void    handle_signal(void);
 
 //*** Shell ***/
 
-bool		prompt_loop(char *cmd, t_program_config *config);
+bool    prompt_loop(char *cmd, t_program_config *config);
+char	*no_last_space(char *str);
+char    *check_exit(char *command);
+char    *terminal_string(char *command);
 
 //*** auxiliary functions ***/
 

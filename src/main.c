@@ -19,13 +19,8 @@ int main(int argc, char **argv, char **envp)
         return (1);
 
     init_process_test(&config);
-    while (prompt_loop(config->name, &config))
-    {
-        /* code */
-    }
+    while (prompt_loop(config->name, &config));
     
-    
-
     // 3. Lanzamiento simple de procesos
     // 4. Shell interactiva básica
 
