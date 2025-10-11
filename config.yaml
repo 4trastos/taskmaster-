@@ -4,6 +4,24 @@
 programs:
 
   # =============================================
+  # PROGRAMAS TEST (davgalle)
+  # =============================================
+  test_davgalle:
+    cmd: "./bin/test_davgalle"
+    numprocs: 1
+    autostart: true
+    autorestart: "unexpected"         # Si termina con código 0 o 1 → NO reiniciar (esperado) · Si termina con otro código → SÍ reiniciar (unexpected)
+    exitcodes: [0, 1]                 # Terminaciones esperadas con éxito
+    startretries: 2
+    starttime: 1
+    stopsignal: "SIGTERM"
+    stoptime: 3
+    stdout: "/tmp/test_davgalle.log"
+    stderr: "/tmp/test_davgalle_err.log"
+    workingdir: "./"
+    umask: "022"
+
+  # =============================================
   # PROGRAMAS DE PRUEBAS (Obligatorios)
   # =============================================
 

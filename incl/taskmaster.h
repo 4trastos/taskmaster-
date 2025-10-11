@@ -69,7 +69,9 @@ typedef struct s_process
     int             error_fd;
 }   t_process;
 
-//*** Binay logic ***/
+//*** Init Process ***/
+
+void    init_process_info(t_program_config *config);
 
 //*** Parser logic ***/
 
@@ -78,6 +80,9 @@ int     get_number_of_program(char *filename);
 //*** comunications & signals ***/
 
 
+//*** Shell ***/
+
+bool		prompt_loop(char *cmd, t_program_config *config);
 
 //*** auxiliary functions ***/
 

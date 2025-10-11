@@ -4,7 +4,7 @@
 int main(int argc, char **argv, char **envp)
 {
     int                 numb_prog;
-    t_program_config    *pconfig;
+    t_program_config    *config;
 
     if (argc != 2)
     {
@@ -14,9 +14,17 @@ int main(int argc, char **argv, char **envp)
     }
     
     numb_prog = get_number_of_program(argv[1]);
-    pconfig = malloc(numb_prog + 1);
-    if (!pconfig)
+    config = malloc(sizeof(t_program_config));
+    if (!config)
         return (1);
+
+    init_process_test(&config);
+    while (prompt_loop(config->name, &config))
+    {
+        /* code */
+    }
+    
+    
 
     // 3. Lanzamiento simple de procesos
     // 4. Shell interactiva básica
@@ -34,6 +42,6 @@ int main(int argc, char **argv, char **envp)
     // 13. Manejo de edge cases
     // 14. Pruebas exhaustivas
 
-    free (pconfig);
+    free (config);
     return (0);
 }
