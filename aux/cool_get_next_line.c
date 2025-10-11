@@ -1,4 +1,4 @@
-#include "../incl/taskmaster.h"
+#include "taskmaster.h"
 
 char	*ft_new_line(char *board)
 {

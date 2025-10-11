@@ -1,5 +1,5 @@
-#include "../incl/taskmaster.h"
-#include "../lib/printf/ft_printf.h"
+#include "taskmaster.h"
+#include "ft_printf.h"
 
 int check_is_name(char *str){
     if (str[0] != ' '){
@@ -79,6 +79,7 @@ int get_number_of_program(char *filename) {
 void fill_field(t_program_config *config, char *field, char *field_value){
     if (field == "cmd"){
         config->command = field_value;
+    } else if (field == "numprocs"){
     }
 }
 

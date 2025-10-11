@@ -1,5 +1,5 @@
-#include "../incl/taskmaster.h"
-#include "../lib/printf/ft_printf.h"
+#include "taskmaster.h"
+#include "ft_printf.h"
 
 // 3. test_sleep.c (Se ejecuta para siempre)
 
