@@ -71,7 +71,9 @@ typedef struct s_process
 
 //*** Binay logic ***/
 
+//*** Parser logic ***/
 
+int     get_number_of_program(char *filename);
 
 //*** comunications & signals ***/
 
