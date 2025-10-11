@@ -1,4 +1,4 @@
-#include "../incl/taskmaster.h"
+#include "taskmaster.h"
 
 size_t	ft_strlen(char *str)
 {

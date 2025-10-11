@@ -1,5 +1,5 @@
-#include "../incl/taskmaster.h"
-#include "../lib/printf/ft_printf.h"
+#include "taskmaster.h"
+#include "ft_printf.h"
 
 /* El sistema de logging de Taskmaster es el mecanismo que el propio daemon
 utiliza para registrar sus decisiones internas, cambios de estado, y eventos de control. 
