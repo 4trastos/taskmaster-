@@ -18,11 +18,20 @@ int main(int argc, char **argv, char **envp)
     if (!config)
         return (1);
 
-    init_process_test(&config);
-    while (prompt_loop(config->name, &config));
+    // 3. INICIALIZACIÓN DE SEÑALES (SIGINT, SIGQUIT, SIGCHLD)
+    init_signal();
     
-    // 3. Lanzamiento simple de procesos
-    // 4. Shell interactiva básica
+    // 4. PREPARACIÓN DE PROCESOS
+    init_process_test(&config, envp);
+
+    // 5. AUTOSTART DE PROCESOS (Lanzamiento inicial de los que lo requieran)
+    start_autostart_programs(config);
+
+    // 6. BUCLÉ MAESTRO (MONITOREO NO BLOQUEANTE Y CLI INTERACTIVA)
+    taskmaster_main_loop(config);
+
+    // 7. LIMPIEZA Y SALIDA
+    ft_printf("Taskmaster se ha cerrado limpiamente.\n");
 
     // 5. Manejo de señales (SIGCHLD)
     // 6. Detección de estado de procesos

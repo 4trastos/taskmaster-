@@ -16,6 +16,7 @@
 # include <sys/user.h>
 # include <sys/wait.h>
 # include <sys/ioctl.h>
+# include <sys/select.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -25,8 +26,6 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 200
 # endif
-
-extern int		g_signal;
 
 typedef enum s_autorestart
 {
@@ -65,6 +64,7 @@ typedef struct s_program_config
     bool                autostart;
     mode_t              umask;
     t_autorestart       autorestart;
+    t_process           *process;
     t_program_config    *next;
 }   t_program_config;
 
@@ -80,9 +80,15 @@ typedef struct s_process
     int             error_fd;
 }   t_process;
 
-//*** Init Process ***/
+extern char     **environ;
+extern int		g_signal;
 
+//*** Process && Taskmaster ***/
+
+void    init_process_test(t_program_config *config, char **envp);
 void    init_process_info(t_program_config *config);
+void    taskmaster_main_loop(t_program_config *config);
+void    start_autostart_programs(t_program_config *config);
 
 //*** Parser logic ***/
 
@@ -91,18 +97,19 @@ int     get_number_of_program(char *filename);
 //*** comunications & signals ***/
 
 void    init_signal(void);
-void    handle_signal(void);
+void    sigint_handler(int signum);
+void    sigchld_handler(int signum);
 
 //*** Shell ***/
 
-bool    prompt_loop(char *cmd, t_program_config *config);
+bool    prompt_loop(t_program_config *config);
 char	*no_last_space(char *str);
-char    *check_exit(char *command);
 char    *terminal_string(char *command);
 
 //*** auxiliary functions ***/
 
 size_t  ft_strlen(char *str);
+int     ft_strcmp(char *s1, char *s2);
 char*   substr(const char *src, int start, int length);
 
 //*** GNL ***/
