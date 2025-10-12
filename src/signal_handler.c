@@ -1,8 +1,6 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
-volatile sig_atomic_t g_child_status_changed = 0;
-
 void    sigchld_handler(int signum)
 {
     (void)signum;
@@ -26,7 +24,6 @@ void    sigint_handler(int signum)
 	rl_redisplay();
 }
 
-// --- INICIALIZACIÓN DE SEÑALES ---
 void    init_signal(void)
 {
     signal(SIGINT, sigint_handler);

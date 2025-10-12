@@ -80,8 +80,9 @@ typedef struct s_process
     int             error_fd;
 }   t_process;
 
-extern char     **environ;
-extern int		g_signal;
+extern char                     **environ;
+extern int		                g_signal;
+extern volatile sig_atomic_t    g_child_status_changed = 0;
 
 //*** Process && Taskmaster ***/
 
@@ -89,6 +90,7 @@ void    init_process_test(t_program_config *config, char **envp);
 void    init_process_info(t_program_config *config);
 void    taskmaster_main_loop(t_program_config *config);
 void    start_autostart_programs(t_program_config *config);
+int     is_user_input_ready(void);
 
 //*** Parser logic ***/
 
@@ -103,6 +105,7 @@ void    sigchld_handler(int signum);
 //*** Shell ***/
 
 bool    prompt_loop(t_program_config *config);
+bool    is_exit_code_expected(t_program_config *config, int exit_code);
 char	*no_last_space(char *str);
 char    *terminal_string(char *command);
 

@@ -1,6 +1,40 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
+bool    is_exit_code_expected(t_program_config *config, int exit_code)
+{
+
+}
+
+void    handle_child_status_change(t_program_config *config)
+{
+    pid_t   pid;
+    int     status;
+
+    while ((pid = waitpid(-1, &status, WNOHANG)) > 0)
+    {
+        if (config->process && config->process->pid == pid)
+        {
+            ft_printf("\n⚠️ Proceso '%s' (PID %d) ha terminado.\n", config->name, config->process->pid);
+            config->process->pstate = STOPPED;
+            if (config->autostart == true && (config->exitcodes == 0 || config->exitcodes == 1))
+                config->process->pstate = STARTING;
+        }
+        if (WIFEXITED(status))
+            ft_printf("   Estado de salida normal: %d\n", WEXITSTATUS(status));
+        else if (WIFSIGNALED(status))
+            ft_printf("   Terminado por señal: %d\n", WTERMSIG(status));
+        free(config->process);
+        config->process = NULL;
+    }
+
+    g_child_status_changed = 0;
+
+    // Necesario para re-imprimir el prompt si estábamos esperando input
+    rl_on_new_line();
+    rl_redisplay();  
+}
+
 bool    prompt_loop(t_program_config *config)
 {
     char    *command;

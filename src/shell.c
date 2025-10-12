@@ -47,23 +47,34 @@ void    taskmaster_main_loop(t_program_config *config)
 {
     while (1)
     {
+        // ===================================
+        // 1. MANEJO DE SEÑALES (SIGCHLD)
+        // ===================================
         if (g_child_status_changed)
-        {
             handle_child_status_change(config);
-            g_child_status_changed = 0;
-        }
+
+        // ===================================
+        // 2. MONITOREO DE PROCESOS (Timeouts, Start Retries, etc.)
+        // ===================================
+        // TODO: En el futuro, aquí se comprobaría:
+        // - Transición de STARTING a RUNNING (si starttime ha expirado y no ha fallado).
+        // - Timeouts en STOPPING.
+        
+        // ===================================
+        // 3. LECTURA DE COMANDO (NO BLOQUEANTE)
+        // ===================================
         if (is_user_input_ready())
         {
             if (!prompt_loop(config))
             break;
         }
-        check_all_program_timeouts(config);
-        usleep(10000);
-        // 1. Comprobar g_child_status_changed (y hacer waitpid si es 1).
-        // 2. Comprobar timeouts de procesos (STARTING, STOPPING, etc.).
-        // 3. Usar select() para esperar INPUT del usuario (no bloqueante, o con timeout corto).
-        // 4. Si select() devuelve INPUT, llamar a readline()/prompt_loop.
-        // 5. Si select() hace timeout, repetir (esto permite el monitoreo).
+        else
+            usleep(10000);
     }
     return;
 }
+// 2. Comprobar timeouts de procesos (STARTING, STOPPING, etc.).
+// 1. Comprobar g_child_status_changed (y hacer waitpid si es 1).
+// 3. Usar select() para esperar INPUT del usuario (no bloqueante, o con timeout corto).
+// 4. Si select() devuelve INPUT, llamar a readline()/prompt_loop.
+// 5. Si select() hace timeout, repetir (esto permite el monitoreo).
