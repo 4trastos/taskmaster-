@@ -17,35 +17,26 @@ int main(int argc, char **argv, char **envp)
     config = malloc(sizeof(t_program_config));
     if (!config)
         return (1);
-
-    // 3. INICIALIZACIÓN DE SEÑALES (SIGINT, SIGQUIT, SIGCHLD)
-    init_signal();
     
-    // 4. PREPARACIÓN DE PROCESOS
+    init_signal();
     init_process_test(&config, envp);
-
-    // 5. AUTOSTART DE PROCESOS (Lanzamiento inicial de los que lo requieran)
     start_autostart_programs(config);
-
-    // 6. BUCLÉ MAESTRO (MONITOREO NO BLOQUEANTE Y CLI INTERACTIVA)
-    taskmaster_main_loop(config);
-
-    // 7. LIMPIEZA Y SALIDA
-    ft_printf("Taskmaster se ha cerrado limpiamente.\n");
-
+    taskmaster_main_loop(config);           // BUCLÉ MAESTRO (MONITOREO NO BLOQUEANTE Y CLI INTERACTIVA)
+    
     // 5. Manejo de señales (SIGCHLD)
     // 6. Detección de estado de procesos
     // 7. Políticas de reinicio básicas
     // 8. Sistema de logging    (es la memoria del daemon)
-
+    
     // 9. Múltiples instancias (numprocs)
     // 10. Recarga con SIGHUP
     // 11. Timeouts y reintentos
     // 12. Redirección de E/S robusta
-
+    
     // 13. Manejo de edge cases
     // 14. Pruebas exhaustivas
-
+    ft_printf("Taskmaster se ha cerrado limpiamente.\n");
+    
     free (config);
     return (0);
 }

@@ -106,8 +106,8 @@ void    sigchld_handler(int signum);
 
 bool    prompt_loop(t_program_config *config);
 bool    is_exit_code_expected(t_program_config *config, int exit_code);
+void    handle_child_status_change(t_program_config *config);
 char	*no_last_space(char *str);
-char    *terminal_string(char *command);
 
 //*** auxiliary functions ***/
 
