@@ -1,21 +1,6 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
-int is_user_input_ready(void)
-{
-    struct timeval  tv = {0, 0}; //Timeout inmediato 0 segundos y 0 milesimas.
-    fd_set          fds;
-
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-
-    // select devuelve el número de file descriptors listos. 
-    // Si select devuelve > 0, al menos un FD está listo.
-    if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0)
-        return (FD_ISSET(STDIN_FILENO, &fds));
-    return (0);
-}
-
 void    init_process_test(t_program_config *config, char **envp)
 {
     config->command = "./bin/test_davgalle";

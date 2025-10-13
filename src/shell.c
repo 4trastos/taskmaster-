@@ -1,6 +1,21 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
+int is_user_input_ready(void)
+{
+    struct timeval  tv = {0, 0}; //Timeout inmediato 0 segundos y 0 milesimas.
+    fd_set          fds;
+
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+
+    // select devuelve el número de file descriptors listos. 
+    // Si select devuelve > 0, al menos un FD está listo.
+    if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0)
+        return (FD_ISSET(STDIN_FILENO, &fds));
+    return (0);
+}
+
 void    start_autostart_programs(t_program_config *config)
 {
     t_process   *process;
@@ -47,22 +62,16 @@ void    taskmaster_main_loop(t_program_config *config)
 {
     while (1)
     {
-        // ===================================
-        // 1. MANEJO DE SEÑALES (SIGCHLD)
-        // ===================================
         if (g_child_status_changed)
-            handle_child_status_change(config);
+            child_status_change(config);
 
         // ===================================
-        // 2. MONITOREO DE PROCESOS (Timeouts, Start Retries, etc.)
+        // MONITOREO DE PROCESOS (Timeouts, Start Retries, etc.)
         // ===================================
         // TODO: En el futuro, aquí se comprobaría:
         // - Transición de STARTING a RUNNING (si starttime ha expirado y no ha fallado).
         // - Timeouts en STOPPING.
         
-        // ===================================
-        // 3. LECTURA DE COMANDO (NO BLOQUEANTE)
-        // ===================================
         if (is_user_input_ready())
         {
             if (!prompt_loop(config))
@@ -73,8 +82,3 @@ void    taskmaster_main_loop(t_program_config *config)
     }
     return;
 }
-// 2. Comprobar timeouts de procesos (STARTING, STOPPING, etc.).
-// 1. Comprobar g_child_status_changed (y hacer waitpid si es 1).
-// 3. Usar select() para esperar INPUT del usuario (no bloqueante, o con timeout corto).
-// 4. Si select() devuelve INPUT, llamar a readline()/prompt_loop.
-// 5. Si select() hace timeout, repetir (esto permite el monitoreo).

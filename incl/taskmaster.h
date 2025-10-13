@@ -80,9 +80,10 @@ typedef struct s_process
     int             error_fd;
 }   t_process;
 
-extern char                     **environ;
-extern int		                g_signal;
-extern volatile sig_atomic_t    g_child_status_changed = 0;
+extern char **environ;
+extern int  g_signal;
+extern int  g_child_status_changed = 0;
+
 
 //*** Process && Taskmaster ***/
 
@@ -106,7 +107,7 @@ void    sigchld_handler(int signum);
 
 bool    prompt_loop(t_program_config *config);
 bool    is_exit_code_expected(t_program_config *config, int exit_code);
-void    handle_child_status_change(t_program_config *config);
+void    child_status_change(t_program_config *config);
 char	*no_last_space(char *str);
 
 //*** auxiliary functions ***/
