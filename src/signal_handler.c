@@ -22,16 +22,14 @@ void    child_status_change(t_program_config *config)
             }
         }
         if (WIFEXITED(status))
-            ft_printf("   Estado de salida normal: %d\n", WEXITSTATUS(status));
+            ft_printf("✅ Estado de salida normal: %d\n", WEXITSTATUS(status));
         else if (WIFSIGNALED(status))
-            ft_printf("   Terminado por señal: %d\n", WTERMSIG(status));
+            ft_printf("✅ Terminado por señal: %d\n", WTERMSIG(status));
         free(config->process);
         config->process = NULL;
     }
 
     g_child_status_changed = 0;
-
-    // Necesario para re-imprimir el prompt si estábamos esperando input
     rl_on_new_line();
     rl_redisplay();  
 }

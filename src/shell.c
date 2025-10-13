@@ -70,7 +70,7 @@ void    taskmaster_main_loop(t_program_config *config)
         if (user_input_ready())
         {
             if (!prompt_loop(config))
-            break;
+                break;
         }
         else
             usleep(10000);
