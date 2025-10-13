@@ -10,7 +10,9 @@ void    child_status_change(t_program_config *config)
     {
         if (config->process && config->process->pid == pid)
         {
+            pthread_mutex_lock(&output_mutex);
             ft_printf("\n⚠️ Proceso '%s' (PID %d) ha terminado.\n", config->name, config->process->pid);
+            pthread_mutex_unlock(&output_mutex);
             config->process->pstate = STOPPED;
             if (config->autostart == true && (config->exitcodes[0] == 0 || config->exitcodes[1] == 1))
             {

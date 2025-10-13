@@ -13,7 +13,6 @@ int main(int argc, char **argv, char **envp)
     {
         ft_printf("❌ Use: %s must have PROG [ARGS] ❌\n", argv[0]);
         return (1);
-
     }
     
     numb_prog = get_number_of_program(argv[1]);

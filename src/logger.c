@@ -3,12 +3,16 @@
 
 void    process_monitoring(t_program_config *config)
 {
-    ft_printf("Estoy dentro y monitoreo config:\n");
-    ft_printf("[COMMAND] ( %s )\n", config->command);
-    ft_printf("[NAME] ( %s )\n", config->name);
-    ft_printf("[ENV] ( %p )\n", config->env);
-    ft_printf("[... ] ( ... )\n");
-    ft_printf("[STOPSINGAL] ( %s )\n", config->stopsignal);
+    if (config->process)
+    {
+        pthread_mutex_lock(&output_mutex);
+        ft_printf("Estoy dentro y monitoreo config:\n");
+        ft_printf("[COMMAND] ( %s )\n", config->command);
+        ft_printf("[NAME] ( %s )\n", config->name);
+        ft_printf("[ENV] ( %p )\n", config->env);
+        ft_printf("[... ] ( ... )\n");
+        pthread_mutex_unlock(&output_mutex);
+    }
     return;
 }
 

@@ -1,6 +1,8 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
+pthread_mutex_t output_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 int user_input_ready(void)
 {
     struct timeval  tv = {0, 0};
@@ -51,7 +53,9 @@ void    start_autostart_programs(t_program_config *config)
         config->process->start_time = time(NULL);
         config->process->pstate = STARTING;
         config->process->restart_count = 0;
+        pthread_mutex_lock(&output_mutex);
         ft_printf("✅ Proceso '%s' iniciado con PID: %d\n", config->name, config->process->pid);
+        pthread_mutex_unlock(&output_mutex);
     }
 }
 

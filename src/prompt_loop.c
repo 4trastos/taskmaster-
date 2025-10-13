@@ -36,7 +36,11 @@ int    status_comand(t_program_config *config, char *command)
         return (-1);
     }
     else
+    {
+        pthread_mutex_lock(&output_mutex);
         ft_printf("❌ Comando no reconocido. Use: [start] , [stop] o [restart] ❌\n");
+        pthread_mutex_unlock(&output_mutex);
+    }
     return (0);
 
 }

@@ -9,6 +9,7 @@
 # include <limits.h>
 # include <stdbool.h>
 # include <termios.h>
+# include <pthread.h>
 # include <sys/errno.h>
 # include <sys/types.h>
 # include <sys/fcntl.h>
@@ -83,6 +84,7 @@ typedef struct s_program_config
 extern char **environ;
 extern int  g_signal;
 extern int  g_child_status_changed;
+extern pthread_mutex_t output_mutex;
 
 
 //*** Process && Taskmaster ***/
