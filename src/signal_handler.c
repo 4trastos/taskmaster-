@@ -15,6 +15,7 @@ void    child_status_change(t_program_config *config)
             if (config->autostart == true && (config->exitcodes == 0 || config->exitcodes == 1))
             {
                 config->process->pstate = STARTING;
+                config->process->restart_count++;
                 break;
             }
         }

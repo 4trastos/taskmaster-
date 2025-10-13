@@ -3,14 +3,13 @@
 
 int is_user_input_ready(void)
 {
-    struct timeval  tv = {0, 0}; //Timeout inmediato 0 segundos y 0 milesimas.
+    struct timeval  tv = {0, 0};
     fd_set          fds;
 
     FD_ZERO(&fds);
     FD_SET(STDIN_FILENO, &fds);
 
-    // select devuelve el número de file descriptors listos. 
-    // Si select devuelve > 0, al menos un FD está listo.
+    // select devuelve el número de file descriptors listos. Si select devuelve > 0, al menos un FD está listo.
     if (select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0)
         return (FD_ISSET(STDIN_FILENO, &fds));
     return (0);
@@ -65,10 +64,8 @@ void    taskmaster_main_loop(t_program_config *config)
         if (g_child_status_changed)
             child_status_change(config);
 
-        // ===================================
         // MONITOREO DE PROCESOS (Timeouts, Start Retries, etc.)
-        // ===================================
-        // TODO: En el futuro, aquí se comprobaría:
+        // Todo se tiene que comprobar en esta parte:
         // - Transición de STARTING a RUNNING (si starttime ha expirado y no ha fallado).
         // - Timeouts en STOPPING.
         

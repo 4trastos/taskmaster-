@@ -87,11 +87,11 @@ extern int  g_child_status_changed = 0;
 
 //*** Process && Taskmaster ***/
 
+int     is_user_input_ready(void);
 void    init_process_test(t_program_config *config, char **envp);
 void    init_process_info(t_program_config *config);
 void    taskmaster_main_loop(t_program_config *config);
 void    start_autostart_programs(t_program_config *config);
-int     is_user_input_ready(void);
 
 //*** Parser logic ***/
 
@@ -105,24 +105,24 @@ void    sigchld_handler(int signum);
 
 //*** Shell ***/
 
-bool    prompt_loop(t_program_config *config);
-bool    is_exit_code_expected(t_program_config *config, int exit_code);
-void    child_status_change(t_program_config *config);
 char	*no_last_space(char *str);
+bool    prompt_loop(t_program_config *config);
+int     status_comand(t_program_config *config, char *command);
+void    child_status_change(t_program_config *config);
 
 //*** auxiliary functions ***/
 
-size_t  ft_strlen(char *str);
-int     ft_strcmp(char *s1, char *s2);
 char*   substr(const char *src, int start, int length);
+int     ft_strcmp(char *s1, char *s2);
+size_t  ft_strlen(char *str);
 
 //*** GNL ***/
-int		get_next_line(int fd, char **line);
+char	*ft_strdup(char *s1);
 char	*ft_strchr(char *s, int c);
+int		get_next_line(int fd, char **line);
+size_t	ft_strlen(char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t n, size_t b);
-size_t	ft_strlen(char *str);
-char	*ft_strdup(char *s1);
 
 #endif
 
