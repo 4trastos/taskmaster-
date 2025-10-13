@@ -1,20 +1,21 @@
 NAME = taskmaster
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g -Iincl -lreadline
+CFLAGS = -Wall -Werror -Wextra -g -Iincl
 RM = rm -f
 LIB = -lftprintf
 
 SRC = src/main.c src/config.c src/logger.c src/process.c src/shell.c src/signal_handler.c aux/auxiliar.c \
-		src/prompt_loop.c
+		src/prompt_loop.c src/parser.c aux/ft_atoi.c aux/cool_get_next_line.c aux/cool_get_next_line_utils.c
 OBJS = $(SRC:.c=.o)
 
 FT_PRINTF_DIR = lib/printf
 FT_PRINTF = $(FT_PRINTF_DIR)/libftprintf.a
+LDFLAGS = -L$(FT_PRINTF_DIR) $(LIB) -lm -lreadline
 
 all: $(NAME)
 
 $(NAME): $(OBJS) $(FT_PRINTF)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(FT_PRINTF_DIR) $(LIB) -lm
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS)
 
 $(FT_PRINTF):
 	@make -C $(FT_PRINTF_DIR)

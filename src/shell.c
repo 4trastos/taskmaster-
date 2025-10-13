@@ -1,7 +1,7 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
-int is_user_input_ready(void)
+int user_input_ready(void)
 {
     struct timeval  tv = {0, 0};
     fd_set          fds;
@@ -20,7 +20,6 @@ void    start_autostart_programs(t_program_config *config)
     t_process   *process;
     char        *argv_exec[2];
     char        **envp_exec;
-    int         status;
 
     process = malloc(sizeof(t_process));
     if (!process)
@@ -63,13 +62,8 @@ void    taskmaster_main_loop(t_program_config *config)
     {
         if (g_child_status_changed)
             child_status_change(config);
-
-        // MONITOREO DE PROCESOS (Timeouts, Start Retries, etc.)
-        // Todo se tiene que comprobar en esta parte:
-        // - Transición de STARTING a RUNNING (si starttime ha expirado y no ha fallado).
-        // - Timeouts en STOPPING.
-        
-        if (is_user_input_ready())
+        process_monitoring(config);
+        if (user_input_ready())
         {
             if (!prompt_loop(config))
             break;

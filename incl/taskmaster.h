@@ -46,52 +46,53 @@ typedef enum s_process_state
     UNKNOWN
 }   t_process_state;
 
-typedef struct s_program_config
-{
-    char                *name;
-    char                *command;
-    char                **env;
-    char                *workingdir;
-    char                *stdout_path;
-    char                *stderr_path;
-    int                 *exitcodes;
-    int                 numbexicod;
-    int                 numprocs;
-    int                 starttime;
-    int                 stoptime;
-    int                 stopsignal;
-    int                 startretries;
-    bool                autostart;
-    mode_t              umask;
-    t_autorestart       autorestart;
-    t_process           *process;
-    t_program_config    *next;
-}   t_program_config;
-
 typedef struct s_process
 {
     pid_t           pid;
     int             instance_id;
-    t_process_state pstate;
     time_t          start_time;
     int             restart_count;
     int             exit_code;
     int             stdout_fd;
     int             error_fd;
+    t_process_state pstate;
 }   t_process;
+
+typedef struct s_program_config
+{
+    char                    *name;
+    char                    *command;
+    char                    **env;
+    char                    *workingdir;
+    char                    *stdout_path;
+    char                    *stderr_path;
+    int                     *exitcodes;
+    int                     numbexicod;
+    int                     numprocs;
+    int                     starttime;
+    int                     stoptime;
+    int                     stopsignal;
+    int                     startretries;
+    bool                    autostart;
+    mode_t                  umask;
+    t_autorestart           autorestart;
+    t_process               *process;
+    struct t_program_config *next;
+}   t_program_config;
 
 extern char **environ;
 extern int  g_signal;
-extern int  g_child_status_changed = 0;
+extern int  g_child_status_changed;
 
 
 //*** Process && Taskmaster ***/
 
-int     is_user_input_ready(void);
+int     user_input_ready(void);
 void    init_process_test(t_program_config *config, char **envp);
 void    init_process_info(t_program_config *config);
 void    taskmaster_main_loop(t_program_config *config);
 void    start_autostart_programs(t_program_config *config);
+void    process_monitoring(t_program_config *config);
 
 //*** Parser logic ***/
 
@@ -123,6 +124,7 @@ int		get_next_line(int fd, char **line);
 size_t	ft_strlen(char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t n, size_t b);
+char	*ft_strjoin(char *board, char *buffer);
 
 #endif
 

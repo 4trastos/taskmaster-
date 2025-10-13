@@ -1,6 +1,9 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
+int g_signal = 0;
+int g_child_status_changed = 0;
+
 int main(int argc, char **argv, char **envp)
 {
     int                 numb_prog;
@@ -14,14 +17,15 @@ int main(int argc, char **argv, char **envp)
     }
     
     numb_prog = get_number_of_program(argv[1]);
+    (void)numb_prog;
     config = malloc(sizeof(t_program_config));
     if (!config)
         return (1);
     
     init_signal();
-    init_process_test(&config, envp);
+    init_process_test(config, envp);
     start_autostart_programs(config);
-    taskmaster_main_loop(config);           // BUCLÉ MAESTRO (MONITOREO NO BLOQUEANTE Y CLI INTERACTIVA)
+    taskmaster_main_loop(config);
     
     ft_printf("✅ Taskmaster se ha cerrado limpiamente.\n");
     

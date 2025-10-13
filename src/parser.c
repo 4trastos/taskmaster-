@@ -77,10 +77,10 @@ int get_number_of_program(char *filename) {
 }
 
 void fill_field(t_program_config *config, char *field, char *field_value){
-    if (field == "cmd"){
+    if (ft_strcmp("cmd", field) == 0)
         config->command = field_value;
-    } else if (field == "numprocs"){
-    }
+    else if (ft_strcmp("numprocs", field) == 0)
+        ft_printf("[DEBUG]: FALTA ( numprocs )\n"); 
 }
 
 t_program_config init_program_config_structs(char * filename, int progam_index){

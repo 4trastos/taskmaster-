@@ -12,7 +12,7 @@ void    child_status_change(t_program_config *config)
         {
             ft_printf("\n⚠️ Proceso '%s' (PID %d) ha terminado.\n", config->name, config->process->pid);
             config->process->pstate = STOPPED;
-            if (config->autostart == true && (config->exitcodes == 0 || config->exitcodes == 1))
+            if (config->autostart == true && (config->exitcodes[0] == 0 || config->exitcodes[1] == 1))
             {
                 config->process->pstate = STARTING;
                 config->process->restart_count++;

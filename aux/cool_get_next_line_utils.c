@@ -1,17 +1,5 @@
 #include "taskmaster.h"
 
-size_t	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
 char	*ft_strchr(char *s, int c)
 {
 	int	i;

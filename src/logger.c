@@ -1,6 +1,17 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
+void    process_monitoring(t_program_config *config)
+{
+    ft_printf("Estoy dentro y monitoreo config:\n");
+    ft_printf("[COMMAND] ( %s )\n", config->command);
+    ft_printf("[NAME] ( %s )\n", config->name);
+    ft_printf("[ENV] ( %p )\n", config->env);
+    ft_printf("[... ] ( ... )\n");
+    ft_printf("[STOPSINGAL] ( %s )\n", config->stopsignal);
+    return;
+}
+
 /* El sistema de logging de Taskmaster es el mecanismo que el propio daemon
 utiliza para registrar sus decisiones internas, cambios de estado, y eventos de control. 
 Es el diario de Taskmaster.
