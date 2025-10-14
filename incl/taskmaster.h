@@ -82,10 +82,9 @@ typedef struct s_program_config
 }   t_program_config;
 
 extern char **environ;
-extern int  g_signal;
-extern int  g_child_status_changed;
 extern pthread_mutex_t output_mutex;
-
+extern volatile sig_atomic_t g_sigint_received;
+extern volatile sig_atomic_t g_child_status_changed;
 
 //*** Process && Taskmaster ***/
 

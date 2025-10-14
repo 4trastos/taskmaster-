@@ -1,8 +1,8 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
-int g_signal = 0;
-int g_child_status_changed = 0;
+volatile sig_atomic_t g_sigint_received = 0;
+volatile sig_atomic_t g_child_status_changed = 0;
 
 int main(int argc, char **argv, char **envp)
 {

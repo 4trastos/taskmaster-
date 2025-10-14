@@ -5,7 +5,7 @@ pthread_mutex_t output_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int user_input_ready(void)
 {
-    struct timeval  tv = {0, 0};
+    struct timeval  tv = {0, 0}; // Creamos un timeout de 0 segundos y 0 milesimas.
     fd_set          fds;
 
     FD_ZERO(&fds);
@@ -65,7 +65,20 @@ void    taskmaster_main_loop(t_program_config *config)
     while (1)
     {
         if (g_child_status_changed)
+        {
+            g_child_status_changed = 0;
             child_status_change(config);
+        }
+
+        if (g_sigint_received)
+        {
+            g_sigint_received = 0;
+            rl_replace_line("", 0);
+            ft_printf("\n");
+            rl_on_new_line();
+            rl_redisplay();
+        }
+
         process_monitoring(config);
         if (user_input_ready())
         {

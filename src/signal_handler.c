@@ -43,23 +43,23 @@ void    sigchld_handler(int signum)
 void    sigint_handler(int signum)
 {
     (void)signum;
-    if (g_signal == 100)
-    {
-        g_signal = 1;
-        rl_redisplay();
-        ioctl(0, TIOCSTI, "\n");
-		return ;
-    }
-
-	ft_printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+    g_sigint_received = 1;
 }
 
 void    init_signal(void)
 {
-    signal(SIGINT, sigint_handler);
+    struct sigaction sa_int = {0};
+    struct sigaction sa_chld = {0};
+
+    sa_int.sa_handler = sigint_handler;
+    sigemptyset(&sa_int.sa_mask);
+    sa_int.sa_flags = 0;
+
+    sa_chld.sa_handler = sigchld_handler;
+    sigemptyset(&sa_chld.sa_mask);
+    sa_chld.sa_flags = SA_RESTART | SA_NOCLDSTOP;
+
+    sigaction(SIGINT, &sa_int, NULL);
+    sigaction(SIGCHLD, &sa_chld, NULL);
     signal(SIGQUIT, SIG_IGN);
-    signal(SIGCHLD, sigchld_handler);
 }
