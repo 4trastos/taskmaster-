@@ -3,7 +3,7 @@
 
 void    process_monitoring(t_program_config *config)
 {
-    if (config->process)
+    if (config->process && g_child_status_changed == 0)
     {
         pthread_mutex_lock(&output_mutex);
         ft_printf("Estoy dentro y monitoreo config:\n");

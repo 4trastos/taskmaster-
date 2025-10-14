@@ -79,7 +79,6 @@ void    taskmaster_main_loop(t_program_config *config)
             rl_redisplay();
         }
 
-        process_monitoring(config);
         if (user_input_ready())
         {
             if (!prompt_loop(config))
