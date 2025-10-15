@@ -3,6 +3,7 @@
 
 int main(int argc, char **argv, char **envp)
 {
+	(void)envp;
     if (argc != 2)
     {
         ft_printf("❌ Use: %s must have PROG [ARGS] ❌\n", argv[0]);
@@ -11,6 +12,12 @@ int main(int argc, char **argv, char **envp)
     }
 
     // 1. Parser de configuración YAML
+	int n = get_number_of_program(argv[1]);
+	t_program_config programs[n + 1];
+	for (int i = 0; i < n; i++){
+		programs[i] = init_program_config_structs(argv[1], i);
+		ft_printf("Config: %s", programs[i].command);
+	}
     // 2. Estructuras de datos básicas
     // 3. Lanzamiento simple de procesos
     // 4. Shell interactiva básica

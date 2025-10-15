@@ -15,7 +15,7 @@ static int check_is_name(char *str){
 }
 
 static char *get_field(char *str){
-    int start;
+    int start = 0;
     int end;
 
     if (ft_strlen(str) < 8){
@@ -29,8 +29,8 @@ static char *get_field(char *str){
     if (start != 4){
         return NULL;
     }
-
-    for (int i = 3; str[i] != ':'; i++){
+	end = start;
+    for (int i = start; str[i] != ':'; i++){
         end++;
     }
 
@@ -38,7 +38,7 @@ static char *get_field(char *str){
 }
 
 static char *get_field_value(char *str) {
-    int start;
+    int start = 0;
     int end;
 
     for (int i = 0; str[i] != ':'; i++){
@@ -48,6 +48,7 @@ static char *get_field_value(char *str) {
     if (str[start] == '"'){
         start++;
         
+		end = start;
         for (int i = start; str[i] != '"'; i++){
             end++;
         }
@@ -59,6 +60,7 @@ static char *get_field_value(char *str) {
         return ft_substr(str, start, end);
     }
 
+	end = start;
     for (int i = start; str[i] != ' ' && str[i] != '\n'; i++){
         end++;
     }
@@ -147,6 +149,7 @@ t_program_config init_program_config_structs(char * filename, int progam_index){
             if (i == progam_index){
                 field = get_field(line);
                 field_value = get_field_value(line);
+				ft_printf("Field: %s, Field Value: %s", field, field_value);
                 if (field != NULL){
                     fill_field(&config, field, field_value);
                 }
@@ -157,6 +160,7 @@ t_program_config init_program_config_structs(char * filename, int progam_index){
             }
         }
     }
+	close(fd);
 
     return config;
 }

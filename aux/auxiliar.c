@@ -1,17 +1,6 @@
 #include "taskmaster.h"
 #include "ft_printf.h"
 
-size_t  ft_strlen(char *str)
-{
-    size_t  len;
-
-    len = 0;
-    while (str[len] != '\0')
-        len++;
-    
-    return (len);
-}
-
 char* ft_substr(const char *src, int start, int length) {
     int src_len = strlen(src);
 

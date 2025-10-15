@@ -38,6 +38,8 @@ typedef enum s_process_state
     UNKNOWN
 }   t_process_state;
 
+typedef struct s_program_config t_program_config;
+
 typedef struct s_program_config
 {
     char                *name;
@@ -86,7 +88,7 @@ t_program_config init_program_config_structs(char * filename, int progam_index);
 //*** auxiliary functions ***/
 
 size_t  ft_strlen(char *str);
-char*   substr(const char *src, int start, int length);
+char*   ft_substr(const char *src, int start, int length);
 int	    ft_atoi(const char *str);
 int     ft_strcmp(const char *s1, const char *s2);
 bool    ft_atob(const char *str);
@@ -98,6 +100,7 @@ void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t n, size_t b);
 size_t	ft_strlen(char *str);
 char	*ft_strdup(char *s1);
+char	*ft_strjoin(char *board, char *buffer);
 
 #endif
 
