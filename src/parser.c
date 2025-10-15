@@ -132,6 +132,18 @@ static void fill_field(t_program_config *config, char *field, char *field_value)
     }
 }
 
+static int check_line_is_useful(char *line){
+	int i = 0;
+	while (line[i] == ' '){
+		if (line[i] == '#')
+			return 1;
+		if ((line[i] >= 'a' && line[i] <= 'z') || (line[i] >= 'A' && line[i] <= 'Z'))
+			return 0;
+		i++;
+	}
+	return 1;
+}
+
 t_program_config init_program_config_structs(char * filename, int progam_index){
     int                 fd;
     int                 i;
@@ -143,13 +155,14 @@ t_program_config init_program_config_structs(char * filename, int progam_index){
     fd = open(filename, O_RDONLY);
     i = 0;
     while (get_next_line(fd, &line)){
-        if (line[0] != '#'){
+        if (line[0] != '#' && ft_strlen(line) > 1 && check_line_is_useful(line) == 0){
+			ft_printf("Line: %s\n", line);
             if (check_is_name(line) == 0)
                 i++;
             if (i == progam_index){
                 field = get_field(line);
                 field_value = get_field_value(line);
-				ft_printf("Field: %s, Field Value: %s", field, field_value);
+				ft_printf("Field: %s, Field Value: %s\n", field, field_value);
                 if (field != NULL){
                     fill_field(&config, field, field_value);
                 }
